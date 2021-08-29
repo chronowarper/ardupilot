@@ -129,6 +129,12 @@ public:
         k_param_fs_ekf_thresh,
         k_param_terrain,
         k_param_acro_rp_expo,
+        k_param_acro_bfrate_rp_rc,
+        k_param_acro_bfrate_rp_super,
+        k_param_acro_bfrate_rp_expo,
+        k_param_acro_bfrate_y_rc,
+        k_param_acro_bfrate_y_super,
+        k_param_acro_bfrate_y_expo,   
         k_param_throttle_deadzone,
         k_param_optflow,
         k_param_dcmcheck_thresh,        // deprecated - remove
@@ -471,6 +477,12 @@ public:
     AP_Float                acro_balance_pitch;
     AP_Int8                 acro_trainer;
     AP_Float                acro_rp_expo;
+    AP_Float                acro_bfrate_rp_rc;
+    AP_Float                acro_bfrate_rp_super;
+    AP_Float                acro_bfrate_rp_expo;
+    AP_Float                acro_bfrate_y_rc;
+    AP_Float                acro_bfrate_y_super;
+    AP_Float                acro_bfrate_y_expo;
 
     // Note: keep initializers here in the same order as they are declared
     // above.

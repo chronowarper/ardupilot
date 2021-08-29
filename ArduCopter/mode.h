@@ -287,6 +287,7 @@ public:
     enum class AcroOptions {
         AIR_MODE = 1 << 0,
         RATE_LOOP_ONLY = 1 << 1,
+        BETAFLIGHT_RATES = 1 << 2,
     };
 
     virtual void run() override;

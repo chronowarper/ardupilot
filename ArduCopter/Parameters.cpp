@@ -481,6 +481,56 @@ const AP_Param::Info Copter::var_info[] = {
     // @Range: -0.5 1.0
     // @User: Advanced
     GSCALAR(acro_rp_expo,  "ACRO_RP_EXPO",    ACRO_RP_EXPO_DEFAULT),
+
+    // @Param: ACRO_BFRATE_RP_RC
+    // @DisplayName: Acro Betaflight Pitch/Yaw RC rate 
+    // @Description: Acro Betaflight Pitch/Yaw RC rate 
+    // @Values: 0:low 2.55:high
+    // @Range: 0 2.55
+    // @User: Advanced
+    GSCALAR(acro_bfrate_rp_rc,  "ACRO_BFRATE_RP_RC",    ACRO_BFRATE_RP_RC_DEFAULT),
+
+    // @Param: ACRO_BFRATE_RP_SUPER
+    // @DisplayName: Acro Betaflight Pitch/Yaw Super rate 
+    // @Description: Acro Betaflight Pitch/Yaw Super rate 
+    // @Values: 0:low 0.99:high
+    // @Range: 0 0.99
+    // @User: Advanced
+    GSCALAR(acro_bfrate_rp_super,  "ACRO_BFRATE_RP_SUPER",    ACRO_BFRATE_RP_SUPER_DEFAULT),
+
+    // @Param: ACRO_BFRATE_RP_EXPO
+    // @DisplayName: Acro Betaflight Pitch/Yaw Expo  
+    // @Description: Acro Betaflight Pitch/Yaw Expo  
+    // @Values: 0:low 1:high
+    // @Range: 0 1
+    // @User: Advanced
+    GSCALAR(acro_bfrate_rp_expo,  "ACRO_BFRATE_RP_EXP",    ACRO_BFRATE_RP_EXPO_DEFAULT),
+
+    // @Param: ACRO_BFRATE_Y_RC
+    // @DisplayName: Acro Betaflight Pitch/Yaw RC rate 
+    // @Description: Acro Betaflight Pitch/Yaw RC rate 
+    // @Values: 0:low 2.55:high
+    // @Range: 0 2.55
+    // @User: Advanced
+    GSCALAR(acro_bfrate_y_rc,  "ACRO_BFRATE_Y_RC",    ACRO_BFRATE_Y_RC_DEFAULT),
+
+    // @Param: ACRO_BFRATE_Y_SUPER
+    // @DisplayName: Acro Betaflight Pitch/Yaw Super rate 
+    // @Description: Acro Betaflight Pitch/Yaw Super rate 
+    // @Values: 0:low 0.99:high
+    // @Range: 0 0.99
+    // @User: Advanced
+    GSCALAR(acro_bfrate_y_super,  "ACRO_BFRATE_Y_SUPER",    ACRO_BFRATE_Y_SUPER_DEFAULT),
+
+    // @Param: ACRO_BFRATE_RP_EXPO
+    // @DisplayName: Acro Betaflight Pitch/Yaw Expo  
+    // @Description: Acro Betaflight Pitch/Yaw Expo  
+    // @Values: 0:low 1:high
+    // @Range: 0 1
+    // @User: Advanced
+    GSCALAR(acro_bfrate_y_expo,  "ACRO_BFRATE_Y_EXP",    ACRO_BFRATE_Y_EXPO_DEFAULT),
+
+    
 #endif
 
     // variables not in the g class which contain EEPROM saved variables

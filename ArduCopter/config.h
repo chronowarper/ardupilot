@@ -485,6 +485,32 @@
  #define ACRO_RP_EXPO_DEFAULT       0.3f
 #endif
 
+
+#ifndef ACRO_BFRATE_RP_RC_DEFAULT
+ #define ACRO_BFRATE_RP_RC_DEFAULT      1.0f
+#endif
+
+#ifndef ACRO_BFRATE_RP_SUPER_DEFAULT
+ #define ACRO_BFRATE_RP_SUPER_DEFAULT      0.2f
+#endif
+
+#ifndef ACRO_BFRATE_RP_EXPO_DEFAULT
+# define ACRO_BFRATE_RP_EXPO_DEFAULT      0.4f
+#endif
+
+#ifndef ACRO_BFRATE_Y_RC_DEFAULT
+# define ACRO_BFRATE_Y_RC_DEFAULT      1.0f
+#endif
+
+#ifndef ACRO_BFRATE_Y_SUPER_DEFAULT
+ #define ACRO_BFRATE_Y_SUPER_DEFAULT      0.2f
+#endif
+
+#ifndef ACRO_BFRATE_Y_EXPO_DEFAULT
+ #define ACRO_BFRATE_Y_EXPO_DEFAULT      0.4f
+#endif
+
+
 #ifndef ACRO_Y_EXPO_DEFAULT
  #define ACRO_Y_EXPO_DEFAULT        0.0f
 #endif
