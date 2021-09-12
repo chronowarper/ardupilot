@@ -124,13 +124,15 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
         
         float rp_in;
 
+        //is roll/pitch_in is in units of degrees/s  (with nominal range of 0 ~ 45)?
+        //in expo calculation, divide rate by max, apply expo, then 
 
         // roll expo
-        rp_in = float(roll_in)/ROLL_PITCH_YAW_INPUT_MAX;
+        rp_in = float(roll_in)/45;
         rate_bf_request.x = 200*((rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1-g.altrate_bf_rp_expo))*g.altrate_bf_rp_rc/(1-(rp_in*g.altrate_bf_rp_super));
 
         // pitch expo
-        rp_in = float(pitch_in)/ROLL_PITCH_YAW_INPUT_MAX;
+        rp_in = float(pitch_in)/45;
         rate_bf_request.y = 200*((rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1-g.altrate_bf_rp_expo))*g.altrate_bf_rp_rc/(1-(rp_in*g.altrate_bf_rp_super));
 
         
