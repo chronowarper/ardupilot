@@ -200,6 +200,7 @@ enum class LogErrorSubsystem : uint8_t {
     FAILSAFE_LEAK = 27,
     PILOT_INPUT = 28,
     FAILSAFE_VIBE = 29,
+    INTERNAL_ERROR = 30,
 };
 
 // bizarrely this enumeration has lots of duplicate values, offering
@@ -229,6 +230,8 @@ enum class LogErrorCode : uint8_t {
     FAILED_CIRCLE_INIT = 4,
     DEST_OUTSIDE_FENCE = 5,
     RTL_MISSING_RNGFND = 6,
+    // subsystem specific error codes -- internal_error
+    INTERNAL_ERRORS_DETECTED = 1,
 
 // parachute failed to deploy because of low altitude or landed
     PARACHUTE_TOO_LOW = 2,
@@ -314,7 +317,11 @@ public:
     void Write_Mode(uint8_t mode, const ModeReason reason);
 
     void Write_EntireMission();
-    void Write_Command(const mavlink_command_int_t &packet, MAV_RESULT result, bool was_command_long=false);
+    void Write_Command(const mavlink_command_int_t &packet,
+                       uint8_t source_system,
+                       uint8_t source_component,
+                       MAV_RESULT result,
+                       bool was_command_long=false);
     void Write_Mission_Cmd(const AP_Mission &mission,
                                const AP_Mission::Mission_Command &cmd);
     void Write_RPM(const AP_RPM &rpm_sensor);
@@ -377,6 +384,7 @@ public:
 
     // accesss to public parameters
     void set_force_log_disarmed(bool force_logging) { _force_log_disarmed = force_logging; }
+    void set_long_log_persist(bool b) { _force_long_log_persist = b; }
     bool log_while_disarmed(void) const;
     uint8_t log_replay(void) const { return _params.log_replay; }
 
@@ -530,6 +538,7 @@ private:
 
     bool _writes_enabled:1;
     bool _force_log_disarmed:1;
+    bool _force_long_log_persist:1;
 
     // remember formats for replay
     void save_format_Replay(const void *pBuffer);
@@ -550,6 +559,7 @@ private:
 
     // last time we handled a log-transfer-over-mavlink message:
     uint32_t _last_mavlink_log_transfer_message_handled_ms;
+    bool _warned_log_disarm; // true if we have sent a message warning to disarm for logging
 
     // next log list entry to send
     uint16_t _log_next_list_entry;
@@ -585,7 +595,6 @@ private:
     // can be used by other subsystems to detect if they should log data
     uint8_t _log_start_count;
 
-    bool should_handle_log_message() const;
     void handle_log_message(class GCS_MAVLINK &, const mavlink_message_t &msg);
 
     void handle_log_request_list(class GCS_MAVLINK &, const mavlink_message_t &msg);

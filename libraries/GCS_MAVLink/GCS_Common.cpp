@@ -269,6 +269,9 @@ void GCS_MAVLINK::send_battery_status(const uint8_t instance) const
     } else {
         consumed_wh = -1;
     }
+    uint8_t _percentage = -1;
+    const int8_t percentage = battery.capacity_remaining_pct(_percentage, instance) ? _percentage : -1;
+
     mavlink_msg_battery_status_send(chan,
                                     instance, // id
                                     MAV_BATTERY_FUNCTION_UNKNOWN, // function
@@ -278,7 +281,7 @@ void GCS_MAVLINK::send_battery_status(const uint8_t instance) const
                                     current,      // current in centiampere
                                     consumed_mah, // total consumed current in milliampere.hour
                                     consumed_wh,  // consumed energy in hJ (hecto-Joules)
-                                    battery.capacity_remaining_pct(instance),
+                                    percentage,
                                     0, // time remaining, seconds (not provided)
                                     battery.get_mavlink_charge_state(instance), // battery charge state
                                     cell_volts_ext, // Cell 11..14 voltages
@@ -2776,6 +2779,11 @@ MAV_RESULT GCS_MAVLINK::handle_preflight_reboot(const mavlink_command_long_t &pa
             }
             return MAV_RESULT_ACCEPTED;
         }
+        if (is_equal(packet.param4, 98.0f)) {
+            send_text(MAV_SEVERITY_WARNING,"Creating internal error");
+            INTERNAL_ERROR(AP_InternalError::error_t::flow_of_control);
+            return MAV_RESULT_ACCEPTED;
+        }
     }
 
     if (hal.util->get_soft_armed()) {
@@ -2949,6 +2957,28 @@ void GCS_MAVLINK::handle_statustext(const mavlink_message_t &msg) const
     logger->Write_Message(text);
 }
 
+
+/*
+  handle logging of named values from mavlink.
+ */
+void GCS_MAVLINK::handle_named_value(const mavlink_message_t &msg) const
+{
+    auto *logger = AP_Logger::get_singleton();
+    if (logger == nullptr) {
+        return;
+    }
+    mavlink_named_value_float_t p;
+    mavlink_msg_named_value_float_decode(&msg, &p);
+    char s[11] {};
+    strncpy(s, p.name, sizeof(s)-1);
+    logger->Write("NVAL", "TimeUS,TimeBootMS,Name,Value,SSys,SCom", "ss#---", "FC----", "QINfBB",
+                  AP_HAL::micros64(),
+                  p.time_boot_ms,
+                  s,
+                  p.value,
+                  msg.sysid,
+                  msg.compid);
+}
 
 void GCS_MAVLINK::handle_system_time_message(const mavlink_message_t &msg)
 {
@@ -3521,6 +3551,10 @@ void GCS_MAVLINK::handle_common_message(const mavlink_message_t &msg)
 
     case MAVLINK_MSG_ID_LANDING_TARGET:
         handle_landing_target(msg);
+        break;
+
+    case MAVLINK_MSG_ID_NAMED_VALUE_FLOAT:
+        handle_named_value(msg);
         break;
     }
 
@@ -4327,7 +4361,7 @@ void GCS_MAVLINK::handle_command_long(const mavlink_message_t &msg)
     // log the packet:
     mavlink_command_int_t packet_int;
     convert_COMMAND_LONG_to_COMMAND_INT(packet, packet_int);
-    AP::logger().Write_Command(packet_int, result, true);
+    AP::logger().Write_Command(packet_int, msg.sysid, msg.compid, result, true);
 
     hal.util->persistent_data.last_mavlink_cmd = 0;
 }
@@ -4514,7 +4548,7 @@ void GCS_MAVLINK::handle_command_int(const mavlink_message_t &msg)
                                  msg.sysid,
                                  msg.compid);
 
-    AP::logger().Write_Command(packet, result);
+    AP::logger().Write_Command(packet, msg.sysid, msg.compid, result);
 
     hal.util->persistent_data.last_mavlink_cmd = 0;
 }
@@ -4608,14 +4642,13 @@ void GCS_MAVLINK::send_sys_status()
 
     const AP_BattMonitor &battery = AP::battery();
     float battery_current;
-    int8_t battery_remaining;
+    uint8_t battery_remaining = -1;
 
     if (battery.healthy() && battery.current_amps(battery_current)) {
-        battery_remaining = battery.capacity_remaining_pct();
+        IGNORE_RETURN(battery.capacity_remaining_pct(battery_remaining));
         battery_current = constrain_float(battery_current * 100,-INT16_MAX,INT16_MAX);
     } else {
         battery_current = -1;
-        battery_remaining = -1;
     }
 
     uint32_t control_sensors_present;
@@ -5510,14 +5543,13 @@ void GCS_MAVLINK::send_high_latency() const
 
     const AP_BattMonitor &battery = AP::battery();
     float battery_current;
-    int8_t battery_remaining;
+    uint8_t battery_remaining = -1;
 
     if (battery.healthy() && battery.current_amps(battery_current)) {
-        battery_remaining = battery.capacity_remaining_pct();
+        IGNORE_RETURN(battery.capacity_remaining_pct(battery_remaining));
         battery_current = constrain_float(battery_current * 100,-INT16_MAX,INT16_MAX);
     } else {
         battery_current = -1;
-        battery_remaining = -1;
     }
 
     AP_Mission *mission = AP::mission();

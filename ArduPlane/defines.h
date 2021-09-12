@@ -161,6 +161,9 @@ enum FlightOptions {
     ACRO_YAW_DAMPER = (1 << 5),
     SURPRESS_TKOFF_SCALING = (1<<6),
     ENABLE_DEFAULT_AIRSPEED = (1<<7),
+    GCS_REMOVE_TRIM_PITCH_CD = (1 << 8),
+    OSD_REMOVE_TRIM_PITCH_CD = (1 << 9),
+    CENTER_THROTTLE_TRIM = (1<<10),
 };
 
 enum CrowFlapOptions {
@@ -180,6 +183,7 @@ enum guided_heading_type_t {
 enum class AirMode {
     OFF,
     ON,
+    ASSISTED_FLIGHT_ONLY,
 };
 
 enum class FenceAutoEnable : uint8_t {

@@ -83,17 +83,9 @@ void ModeLand::gps_run()
         if (land_pause && millis()-land_start_time >= LAND_WITH_DELAY_MS) {
             land_pause = false;
         }
-#if PRECISION_LANDING == ENABLED
-        // the state machine takes care of the entire landing procedure except for land_pause.
-        if (land_pause) {
-            // we don't want to start descending immediately
-            run_land_controllers(true);
-        } else {
-            run_precland();
-        }
-#else
-        run_land_controllers(land_pause);
-#endif
+
+        // run normal landing or precision landing (if enabled)
+        land_run_normal_or_precland(land_pause);
     }
 }
 
@@ -118,7 +110,7 @@ void ModeLand::nogps_run()
             update_simple_mode();
 
             // get pilot desired lean angles
-            get_pilot_desired_lean_angles(target_roll, target_pitch, copter.aparm.angle_max, attitude_control->get_althold_lean_angle_max());
+            get_pilot_desired_lean_angles(target_roll, target_pitch, copter.aparm.angle_max, attitude_control->get_althold_lean_angle_max_cd());
         }
 
         // get pilot's desired yaw rate

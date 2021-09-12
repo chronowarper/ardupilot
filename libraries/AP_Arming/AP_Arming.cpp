@@ -260,6 +260,10 @@ bool AP_Arming::logging_checks(bool report)
             check_failed(ARMING_CHECK_LOGGING, report, "No SD card");
             return false;
         }
+        if (AP::logger().in_log_download()) {
+            check_failed(ARMING_CHECK_LOGGING, report, "Downloading logs");
+            return false;
+        }
     }
     return true;
 }
@@ -488,16 +492,35 @@ bool AP_Arming::gps_checks(bool report)
                 return false;
         }
 
-        //GPS OK?
-        if (!AP::ahrs().home_is_set() ||
-            gps.status() < AP_GPS::GPS_OK_FIX_3D) {
-            check_failed(ARMING_CHECK_GPS, report, "Bad GPS Position");
-            return false;
+        for (uint8_t i = 0; i < gps.num_sensors(); i++) {
+#if defined(GPS_BLENDED_INSTANCE)
+            if ((i != GPS_BLENDED_INSTANCE) &&
+#else
+            if (
+#endif
+                    (gps.get_type(i) == AP_GPS::GPS_Type::GPS_TYPE_NONE)) {
+                if (gps.primary_sensor() == i) {
+                    check_failed(ARMING_CHECK_GPS, report, "GPS %i: primary but TYPE 0", i+1);
+                    return false;
+                }
+                continue;
+            }
+
+            //GPS OK?
+            if (gps.status(i) < AP_GPS::GPS_OK_FIX_3D) {
+                check_failed(ARMING_CHECK_GPS, report, "GPS %i: Bad fix", i+1);
+                return false;
+            }
+
+            //GPS update rate acceptable
+            if (!gps.is_healthy(i)) {
+                check_failed(ARMING_CHECK_GPS, report, "GPS %i: not healthy", i+1);
+                return false;
+            }
         }
 
-        //GPS update rate acceptable
-        if (!gps.is_healthy()) {
-            check_failed(ARMING_CHECK_GPS, report, "GPS is not healthy");
+        if (!AP::ahrs().home_is_set()) {
+            check_failed(ARMING_CHECK_GPS, report, "GPS: waiting for home");
             return false;
         }
 
@@ -1316,6 +1339,8 @@ bool AP_Arming::disarm(const AP_Arming::Method method, bool do_disarm_checks)
 
     Log_Write_Disarm(method); // should be able to pass through force here?
 
+    check_forced_logging(method);
+
 #if HAL_HAVE_SAFETY_SWITCH
     AP_BoardConfig *board_cfg = AP_BoardConfig::get_singleton();
     if ((board_cfg != nullptr) &&
@@ -1453,6 +1478,54 @@ void AP_Arming::Log_Write_Disarm(const AP_Arming::Method method)
     };
     AP::logger().WriteCriticalBlock(&pkt, sizeof(pkt));
     AP::logger().Write_Event(LogEvent::DISARMED);
+}
+
+// check if we should keep logging after disarming
+void AP_Arming::check_forced_logging(const AP_Arming::Method method)
+{
+    // keep logging if disarmed for a bad reason
+    switch(method) {
+        case Method::TERMINATION:
+        case Method::CPUFAILSAFE:
+        case Method::BATTERYFAILSAFE:
+        case Method::AFS:
+        case Method::ADSBCOLLISIONACTION:
+        case Method::PARACHUTE_RELEASE:
+        case Method::CRASH:
+        case Method::FENCEBREACH:
+        case Method::RADIOFAILSAFE:
+        case Method::GCSFAILSAFE:
+        case Method::TERRRAINFAILSAFE:
+        case Method::FAILSAFE_ACTION_TERMINATE:
+        case Method::TERRAINFAILSAFE:
+        case Method::BADFLOWOFCONTROL:
+        case Method::EKFFAILSAFE:
+        case Method::GCS_FAILSAFE_SURFACEFAILED:
+        case Method::GCS_FAILSAFE_HOLDFAILED:
+        case Method::PILOT_INPUT_FAILSAFE:
+            // keep logging for longger if disarmed for a bad reason
+            AP::logger().set_long_log_persist(true);
+            return;
+
+        case Method::RUDDER:
+        case Method::MAVLINK:
+        case Method::AUXSWITCH:
+        case Method::MOTORTEST:
+        case Method::SCRIPTING:
+        case Method::SOLOPAUSEWHENLANDED:
+        case Method::LANDED:
+        case Method::MISSIONEXIT:
+        case Method::DISARMDELAY:
+        case Method::MOTORDETECTDONE:
+        case Method::TAKEOFFTIMEOUT:
+        case Method::AUTOLANDED:
+        case Method::TOYMODELANDTHROTTLE:
+        case Method::TOYMODELANDFORCE:
+        case Method::LANDING:
+        case Method::UNKNOWN:
+            AP::logger().set_long_log_persist(false);
+            return;
+    };
 }
 
 AP_Arming *AP_Arming::_singleton = nullptr;

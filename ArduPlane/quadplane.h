@@ -53,9 +53,7 @@ public:
     static const struct AP_Param::GroupInfo var_info[];
     static const struct AP_Param::GroupInfo var_info2[];
 
-    void control_run(void);
     void control_auto(void);
-    bool init_mode(void);
     bool setup(void);
 
     void vtol_position_controller(void);
@@ -180,8 +178,11 @@ private:
     // vertical acceleration the pilot may request
     AP_Int16 pilot_accel_z;
 
-     // air mode state: OFF, ON
+    // air mode state: OFF, ON, ASSISTED_FLIGHT_ONLY
     AirMode air_mode;
+
+    // return true if airmode should be active
+    bool air_mode_active() const;
 
     // check for quadplane assistance needed
     bool should_assist(float aspeed, bool have_airspeed);

@@ -82,6 +82,15 @@ extern AP_Periph_FW periph;
 #define HAL_CAN_POOL_SIZE 4000
 #endif
 
+#ifndef HAL_PERIPH_LOOP_DELAY_US
+// delay between can loop updates. This needs to be longer on F4
+#if defined(STM32H7)
+#define HAL_PERIPH_LOOP_DELAY_US 64
+#else
+#define HAL_PERIPH_LOOP_DELAY_US 512
+#endif
+#endif
+
 #define DEBUG_PRINTS 0
 #define DEBUG_PKTS 0
 #if DEBUG_PRINTS
@@ -1623,7 +1632,7 @@ void AP_Periph_FW::can_update()
 #endif
     const uint32_t now_us = AP_HAL::micros();
     while ((AP_HAL::micros() - now_us) < 1000) {
-        hal.scheduler->delay_microseconds(64);
+        hal.scheduler->delay_microseconds(HAL_PERIPH_LOOP_DELAY_US);
         processTx();
         processRx();
     }
@@ -1716,7 +1725,10 @@ void AP_Periph_FW::can_battery_update(void)
         }
 
         pkt.state_of_health_pct = UAVCAN_EQUIPMENT_POWER_BATTERYINFO_STATE_OF_HEALTH_UNKNOWN;
-        pkt.state_of_charge_pct = battery.lib.capacity_remaining_pct(i);
+        uint8_t percentage = 0;
+        if (battery.lib.capacity_remaining_pct(percentage, i)) {
+            pkt.state_of_charge_pct = percentage;
+        }
         pkt.model_instance_id = i+1;
 
 #if !defined(HAL_PERIPH_BATTERY_SKIP_NAME)

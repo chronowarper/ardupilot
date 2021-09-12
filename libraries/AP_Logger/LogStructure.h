@@ -336,10 +336,10 @@ struct PACKED log_MAVLink_Command {
     uint64_t time_us;
     uint8_t target_system;
     uint8_t target_component;
+    uint8_t source_system;
+    uint8_t source_component;
     uint8_t frame;
     uint16_t command;
-    uint8_t current;
-    uint8_t autocontinue;
     float param1;
     float param2;
     float param3;
@@ -908,10 +908,10 @@ struct PACKED log_PSCZ {
 // @Field: TimeUS: Time since system startup
 // @Field: TS: target system for command
 // @Field: TC: target component for command
+// @Field: SS: target system for command
+// @Field: SC: target component for command
 // @Field: Fr: command frame
 // @Field: Cmd: mavlink command enum value
-// @Field: Cur: current flag from mavlink packet
-// @Field: AC: autocontinue flag from mavlink packet
 // @Field: P1: first parameter from mavlink packet
 // @Field: P2: second parameter from mavlink packet
 // @Field: P3: third parameter from mavlink packet
@@ -1193,14 +1193,14 @@ struct PACKED log_PSCZ {
 // @LoggerMessage: PSC
 // @Description: Position Control data
 // @Field: TimeUS: Time since system startup
-// @Field: TPX: Target position relative to origin, X-axis
-// @Field: TPY: Target position relative to origin, Y-axis
-// @Field: PX: Position relative to origin, X-axis
-// @Field: PY: Position relative to origin, Y-axis
-// @Field: TVX: Target velocity, X-axis
-// @Field: TVY: Target velocity, Y-axis
-// @Field: VX: Velocity, X-axis
-// @Field: VY: Velocity, Y-axis
+// @Field: TPX: Target position relative to origin, North
+// @Field: TPY: Target position relative to origin, East
+// @Field: PX: Position relative to origin, North
+// @Field: PY: Position relative to origin, East
+// @Field: TVX: Target velocity, North
+// @Field: TVY: Target velocity, East
+// @Field: VX: Velocity, North
+// @Field: VY: Velocity, East
 // @Field: TAX: Target acceleration, X-axis
 // @Field: TAY: Target acceleration, Y-axis
 // @Field: AX: Acceleration, X-axis
@@ -1249,7 +1249,7 @@ LOG_STRUCTURE_FROM_PRECLAND \
     { LOG_CMD_MSG, sizeof(log_Cmd), \
       "CMD", "QHHHffffLLfB","TimeUS,CTot,CNum,CId,Prm1,Prm2,Prm3,Prm4,Lat,Lng,Alt,Frame", "s-------DUm-", "F-------GG0-" }, \
     { LOG_MAVLINK_COMMAND_MSG, sizeof(log_MAVLink_Command), \
-      "MAVC", "QBBBHBBffffiifBB","TimeUS,TS,TC,Fr,Cmd,Cur,AC,P1,P2,P3,P4,X,Y,Z,Res,WL", "s---------------", "F---------------" }, \
+      "MAVC", "QBBBBBHffffiifBB","TimeUS,TS,TC,SS,SC,Fr,Cmd,P1,P2,P3,P4,X,Y,Z,Res,WL", "s---------------", "F---------------" }, \
     { LOG_RADIO_MSG, sizeof(log_Radio), \
       "RAD", "QBBBBBHH", "TimeUS,RSSI,RemRSSI,TxBuf,Noise,RemNoise,RxErrors,Fixed", "s-------", "F-------", true }, \
 LOG_STRUCTURE_FROM_CAMERA \

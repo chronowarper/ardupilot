@@ -43,6 +43,9 @@ class Board:
         cfg.load('cxx_checks')
 
         env = waflib.ConfigSet.ConfigSet()
+        def srcpath(path):
+            return cfg.srcnode.make_node(path).abspath()
+        env.SRCROOT = srcpath('')
         self.configure_env(cfg, env)
 
         # Setup scripting, had to defer this to allow checking board size
@@ -322,6 +325,7 @@ class Board:
             ]
         else:
             env.LINKFLAGS += [
+                '-fno-exceptions',
                 '-Wl,--gc-sections',
             ]
 
@@ -591,10 +595,6 @@ class sitl(Board):
             env.CXXFLAGS += [
                 '-fno-slp-vectorize' # compiler bug when trying to use SLP
             ]
-        
-        def srcpath(path):
-            return cfg.srcnode.make_node(path).abspath()
-        env.SRCROOT = srcpath('')
 
 class sitl_periph_gps(sitl):
     def configure_env(self, cfg, env):
@@ -1076,6 +1076,16 @@ class rst_zynq(linux):
 
         env.DEFINES.update(
             CONFIG_HAL_BOARD_SUBTYPE = 'HAL_BOARD_SUBTYPE_LINUX_RST_ZYNQ',
+        )
+
+class obal(linux):
+    toolchain = 'arm-linux-gnueabihf'
+
+    def configure_env(self, cfg, env):
+        super(obal, self).configure_env(cfg, env)
+
+        env.DEFINES.update(
+            CONFIG_HAL_BOARD_SUBTYPE = 'HAL_BOARD_SUBTYPE_LINUX_OBAL_V1',
         )
 
 class SITL_static(sitl):

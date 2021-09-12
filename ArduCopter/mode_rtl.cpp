@@ -319,7 +319,7 @@ void ModeRTL::descent_run()
             update_simple_mode();
 
             // convert pilot input to lean angles
-            get_pilot_desired_lean_angles(target_roll, target_pitch, loiter_nav->get_angle_max_cd(), attitude_control->get_althold_lean_angle_max());
+            get_pilot_desired_lean_angles(target_roll, target_pitch, loiter_nav->get_angle_max_cd(), attitude_control->get_althold_lean_angle_max_cd());
 
             // record if pilot has overridden roll or pitch
             if (!is_zero(target_roll) || !is_zero(target_pitch)) {
@@ -413,12 +413,8 @@ void ModeRTL::land_run(bool disarm_on_land)
     // set motors to full range
     motors->set_desired_spool_state(AP_Motors::DesiredSpoolState::THROTTLE_UNLIMITED);
 
-#if PRECISION_LANDING == ENABLED
-        // the state machine takes care of the entire landing procedure
-        run_precland();
-#else
-        run_land_controllers();
-#endif
+    // run normal landing or precision landing (if enabled)
+    land_run_normal_or_precland();
 }
 
 void ModeRTL::build_path()
