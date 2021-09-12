@@ -474,8 +474,8 @@
  #define ACRO_RP_EXPO_DEFAULT       0.3f
 #endif
 
-#ifndef ALTRATE_TYPE
- #define ALTRATE_TYPE             0
+#ifndef ALTRATE_TYPE_DEFAULT
+ #define ALTRATE_TYPE_DEFAULT             0
 #endif
 
 #ifndef ALTRATE_BF_RP_RC_DEFAULT
