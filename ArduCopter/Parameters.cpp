@@ -505,7 +505,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Values: 0:low 1:high
     // @Range: 0 1
     // @User: Advanced
-    GSCALAR(altrate_bf_rp_expo,  "BARATE_BF_RP_EXP",    ALTRATE_BF_RP_EXPO_DEFAULT),
+    GSCALAR(altrate_bf_rp_expo,  "ARATE_BF_RP_EXP",    ALTRATE_BF_RP_EXPO_DEFAULT),
 
     // @Param: ALTRATE_BF_Y_RC
     // @DisplayName: Acro Betaflight Pitch/Yaw RC rate 
@@ -513,7 +513,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Values: 0:low 2.55:high
     // @Range: 0 2.55
     // @User: Advanced
-    GSCALAR(altrate_bf_y_rc,  "BARATE_BF_Y_RC",    ALTRATE_BF_Y_RC_DEFAULT),
+    GSCALAR(altrate_bf_y_rc,  "ARATE_BF_Y_RC",    ALTRATE_BF_Y_RC_DEFAULT),
 
     // @Param: ALTRATE_BF_Y_SUPER
     // @DisplayName: Acro Betaflight Pitch/Yaw Super rate 
