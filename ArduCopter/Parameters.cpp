@@ -497,7 +497,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Values: 0:low 0.99:high
     // @Range: 0 0.99
     // @User: Advanced
-    GSCALAR(altrate_bf_rp_super,  "ARATE_BF_RP_SPR",    ALTRATE_BF_P_SUPER_DEFAULT),
+    GSCALAR(altrate_bf_rp_super,  "ARATE_BF_RP_SPR",    ALTRATE_BF_RP_SUPER_DEFAULT),
 
     // @Param: ALTRATE_BF_RP_EXPO
     // @DisplayName: Acro Betaflight Pitch/Yaw Expo  
