@@ -915,6 +915,8 @@ float Mode::get_pilot_desired_yaw_rate(int16_t stick_angle)
     float yaw_request;
 
     //if acro betaflight rate option is enabled, calculate rates using betaflight parameters 
+
+    //FIXME - shouldn't use magic # for BF option
     if ((g2.acro_options.get() & 0x4)) {
         
         float y_in;
