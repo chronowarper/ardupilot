@@ -485,11 +485,11 @@ public:
     //Alternative rates
     AP_Int8                 altrate_type;       //enables and selects alternative rate. 0: acro default, 1: betaflight
     AP_Float                altrate_bf_rp_rc;   
-    AP_Float                altrate_bf_p_super;
-    AP_Float                altrate_bf_expo;
+    AP_Float                altrate_bf_rp_super;
+    AP_Float                altrate_bf_rp_expo;
     AP_Float                altrate_bf_y_rc;
-    AP_Float                altrate_bf_super;
-    AP_Float                altrate_bf_expo;
+    AP_Float                altrate_bf_y_super;
+    AP_Float                altrate_bf_y_expo;
 
     // Note: keep initializers here in the same order as they are declared
     // above.
