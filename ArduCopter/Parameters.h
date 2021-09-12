@@ -379,12 +379,13 @@ public:
 
         //
         //270: acro betaflight rate
-        k_param_acro_bfrate_rp_rc = 270,
-        k_param_acro_bfrate_rp_super,
-        k_param_acro_bfrate_rp_expo,
-        k_param_acro_bfrate_y_rc,
-        k_param_acro_bfrate_y_super,
-        k_param_acro_bfrate_y_expo,   //275
+        k_param_altrate_type = 270,
+        k_param_altrate_bf_rp_rc,
+        k_param_altrate_bf_rp_super,
+        k_param_altrate_bf_rp_expo,
+        k_param_altrate_bf_y_rc,
+        k_param_altrate_bf_y_super,
+        k_param_altrate_bf_y_expo,   //275
 
     
 
@@ -480,12 +481,15 @@ public:
     AP_Float                acro_balance_pitch;
     AP_Int8                 acro_trainer;
     AP_Float                acro_rp_expo;
-    AP_Float                acro_bfrate_rp_rc;
-    AP_Float                acro_bfrate_rp_super;
-    AP_Float                acro_bfrate_rp_expo;
-    AP_Float                acro_bfrate_y_rc;
-    AP_Float                acro_bfrate_y_super;
-    AP_Float                acro_bfrate_y_expo;
+
+    //Alternative rates
+    AP_Int8                 altrate_type;       //enables and selects alternative rate. 0: acro default, 1: betaflight
+    AP_Float                altrate_bf_rp_rc;   
+    AP_Float                altrate_bf_p_super;
+    AP_Float                altrate_bf_expo;
+    AP_Float                altrate_bf_y_rc;
+    AP_Float                altrate_bf_super;
+    AP_Float                altrate_bf_expo;
 
     // Note: keep initializers here in the same order as they are declared
     // above.

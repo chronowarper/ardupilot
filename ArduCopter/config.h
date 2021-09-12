@@ -474,29 +474,32 @@
  #define ACRO_RP_EXPO_DEFAULT       0.3f
 #endif
 
-
-#ifndef ACRO_BFRATE_RP_RC_DEFAULT
- #define ACRO_BFRATE_RP_RC_DEFAULT      1.0f
+#ifndef ALTRATE_TYPE
+ #define ALTRATE_TYPE             0
 #endif
 
-#ifndef ACRO_BFRATE_RP_SUPER_DEFAULT
- #define ACRO_BFRATE_RP_SUPER_DEFAULT      0.2f
+#ifndef ALTRATE_BF_RP_RC_DEFAULT
+ #define ALTRATE_BF_RP_RC_DEFAULT      1.0f
 #endif
 
-#ifndef ACRO_BFRATE_RP_EXPO_DEFAULT
-# define ACRO_BFRATE_RP_EXPO_DEFAULT      0.4f
+#ifndef ALTRATE_BF_RP_SUPER_DEFAULT
+ #define ALTRATE_BF_RP_SUPER_DEFAULT      0.2f
 #endif
 
-#ifndef ACRO_BFRATE_Y_RC_DEFAULT
-# define ACRO_BFRATE_Y_RC_DEFAULT      1.0f
+#ifndef ALTRATE_BF_RP_EXPO_DEFAULT
+# define ALTRATE_BF_RP_EXPO_DEFAULT      0.4f
 #endif
 
-#ifndef ACRO_BFRATE_Y_SUPER_DEFAULT
- #define ACRO_BFRATE_Y_SUPER_DEFAULT      0.2f
+#ifndef ALTRATE_BF_Y_RC_DEFAULT
+# define ALTRATE_BF_Y_RC_DEFAULT      1.0f
 #endif
 
-#ifndef ACRO_BFRATE_Y_EXPO_DEFAULT
- #define ACRO_BFRATE_Y_EXPO_DEFAULT      0.4f
+#ifndef ALTRATE_BF_Y_SUPER_DEFAULT
+ #define ALTRATE_BF_Y_SUPER_DEFAULT      0.2f
+#endif
+
+#ifndef ALTRATE_BF_Y_EXPO_DEFAULT
+ #define ALTRATE_BF_Y_EXPO_DEFAULT      0.4f
 #endif
 
 
