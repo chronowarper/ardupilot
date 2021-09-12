@@ -478,7 +478,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Values: 0:low 2.55:high
     // @Range: 0 2.55
     // @User: Advanced
-    GSCALAR(acro_bfrate_rp_rc,  "ACRO_BFRATE_RP_RC",    ACRO_BFRATE_RP_RC_DEFAULT),
+    GSCALAR(acro_bfrate_rp_rc,  "BFRATE_RP_RC",    ACRO_BFRATE_RP_RC_DEFAULT),
 
     // @Param: ACRO_BFRATE_RP_SUPER
     // @DisplayName: Acro Betaflight Pitch/Yaw Super rate 
@@ -486,7 +486,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Values: 0:low 0.99:high
     // @Range: 0 0.99
     // @User: Advanced
-    GSCALAR(acro_bfrate_rp_super,  "ACRO_BFRATE_RP_SUPER",    ACRO_BFRATE_RP_SUPER_DEFAULT),
+    GSCALAR(acro_bfrate_rp_super,  "BFRATE_RP_SUPER",    ACRO_BFRATE_RP_SUPER_DEFAULT),
 
     // @Param: ACRO_BFRATE_RP_EXPO
     // @DisplayName: Acro Betaflight Pitch/Yaw Expo  
@@ -494,7 +494,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Values: 0:low 1:high
     // @Range: 0 1
     // @User: Advanced
-    GSCALAR(acro_bfrate_rp_expo,  "ACRO_BFRATE_RP_EXP",    ACRO_BFRATE_RP_EXPO_DEFAULT),
+    GSCALAR(acro_bfrate_rp_expo,  "BFRATE_RP_EXP",    ACRO_BFRATE_RP_EXPO_DEFAULT),
 
     // @Param: ACRO_BFRATE_Y_RC
     // @DisplayName: Acro Betaflight Pitch/Yaw RC rate 
@@ -502,7 +502,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Values: 0:low 2.55:high
     // @Range: 0 2.55
     // @User: Advanced
-    GSCALAR(acro_bfrate_y_rc,  "ACRO_BFRATE_Y_RC",    ACRO_BFRATE_Y_RC_DEFAULT),
+    GSCALAR(acro_bfrate_y_rc,  "BFRATE_Y_RC",    ACRO_BFRATE_Y_RC_DEFAULT),
 
     // @Param: ACRO_BFRATE_Y_SUPER
     // @DisplayName: Acro Betaflight Pitch/Yaw Super rate 
@@ -510,7 +510,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Values: 0:low 0.99:high
     // @Range: 0 0.99
     // @User: Advanced
-    GSCALAR(acro_bfrate_y_super,  "ACRO_BFRATE_Y_SUPER",    ACRO_BFRATE_Y_SUPER_DEFAULT),
+    GSCALAR(acro_bfrate_y_super,  "BFRATE_Y_SUPER",    ACRO_BFRATE_Y_SUPER_DEFAULT),
 
     // @Param: ACRO_BFRATE_RP_EXPO
     // @DisplayName: Acro Betaflight Pitch/Yaw Expo  
@@ -518,7 +518,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @Values: 0:low 1:high
     // @Range: 0 1
     // @User: Advanced
-    GSCALAR(acro_bfrate_y_expo,  "ACRO_BFRATE_Y_EXP",    ACRO_BFRATE_Y_EXPO_DEFAULT),
+    GSCALAR(acro_bfrate_y_expo,  "BFRATE_Y_EXP",    ACRO_BFRATE_Y_EXPO_DEFAULT),
 
     
 #endif

@@ -129,12 +129,6 @@ public:
         k_param_fs_ekf_thresh,
         k_param_terrain,
         k_param_acro_rp_expo,
-        k_param_acro_bfrate_rp_rc,
-        k_param_acro_bfrate_rp_super,
-        k_param_acro_bfrate_rp_expo,
-        k_param_acro_bfrate_y_rc,
-        k_param_acro_bfrate_y_super,
-        k_param_acro_bfrate_y_expo,   
         k_param_throttle_deadzone,
         k_param_optflow,
         k_param_dcmcheck_thresh,        // deprecated - remove
@@ -382,6 +376,19 @@ public:
         // 254,255: reserved
 
         k_param_vehicle = 257, // vehicle common block of parameters
+
+        //
+        //270: acro betaflight rate
+        k_param_acro_bfrate_rp_rc = 270,
+        k_param_acro_bfrate_rp_super,
+        k_param_acro_bfrate_rp_expo,
+        k_param_acro_bfrate_y_rc,
+        k_param_acro_bfrate_y_super,
+        k_param_acro_bfrate_y_expo,   //275
+
+    
+
+
 
         // the k_param_* space is 9-bits in size
         // 511: reserved
