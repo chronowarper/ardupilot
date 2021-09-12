@@ -905,7 +905,7 @@ float Mode::get_pilot_desired_yaw_rate(int16_t stick_angle)
     g2.acro_y_expo = constrain_float(g2.acro_y_expo, -0.5f, 1.0f);
 
     // range check BF rates 
-    g.acro_bfrate_y_rc = constrain_float(g.acro_bf_y_rc, 0, 2.55);
+    g.acro_bfrate_y_rc = constrain_float(g.acro_bfrate_y_rc, 0, 2.55);
     g.acro_bfrate_y_super = constrain_float(g.acro_bfrate_y_super, 0, 0.99);    
     g.acro_bfrate_y_expo = constrain_float(g.acro_bfrate_y_expo, 0, 1);
 
