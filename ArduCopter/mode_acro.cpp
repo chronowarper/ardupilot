@@ -122,7 +122,7 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
     //if acro betaflight rate option is enabled, calculate rates using betaflight parameters 
     if (g.altrate_type==1) {
         
-        float rp_in,bf_p,bf_q
+        float rp_in,bf_p,bf_q;
 
         //is roll/pitch_in is in units of degrees/s  (with nominal range of 0 ~ 45)?
         //in expo calculation, divide rate by max, apply expo, then 
