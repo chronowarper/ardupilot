@@ -928,9 +928,29 @@ float Mode::get_pilot_desired_yaw_rate(int16_t stick_angle)
     // range check expo
     g2.acro_y_expo = constrain_float(g2.acro_y_expo, -0.5f, 1.0f);
 
+    // range check BF rates 
+    g.acro_bfrate_y_rc = constrain_float(g.acro_bfrate_y_rc, 0, 2.55);
+    g.acro_bfrate_y_super = constrain_float(g.acro_bfrate_y_super, 0, 0.99);    
+    g.acro_bfrate_y_expo = constrain_float(g.acro_bfrate_y_expo, 0, 1);
+
+    
+
     // calculate yaw rate request
     float yaw_request;
-    if (is_zero(g2.acro_y_expo)) {
+
+    //if acro betaflight rate option is enabled, calculate rates using betaflight parameters 
+
+    //FIXME - shouldn't use magic # for BF option
+    if ((g2.acro_options.get() & 0x4)) {
+        
+        float y_in;
+        y_in = float(stick_angle)/ROLL_PITCH_YAW_INPUT_MAX;
+        yaw_request = 200*((y_in*y_in*y_in*y_in*g.acro_bfrate_y_expo)+y_in*(1-g.acro_bfrate_y_expo))*g.acro_bfrate_y_rc/(1-(y_in*g.acro_bfrate_y_super));
+
+    }
+    //otherwise calculate rates using ACRP_Y_EXP and YAW_P method
+
+    else if (is_zero(g2.acro_y_expo)) {
         yaw_request = stick_angle * g.acro_yaw_p;
     } else {
         // expo variables

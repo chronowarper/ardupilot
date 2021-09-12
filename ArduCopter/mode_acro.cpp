@@ -110,11 +110,33 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
         pitch_in *= ratio;
     }
 
-    // range check expo
+    // range check expo and rates
     g.acro_rp_expo = constrain_float(g.acro_rp_expo, -0.5f, 1.0f);
-    
-    // calculate roll, pitch rate requests
-    if (is_zero(g.acro_rp_expo)) {
+
+    // range check BF rates
+    g.acro_bfrate_rp_rc = constrain_float(g.acro_bfrate_rp_rc, 0.0f, 2.55f);
+    g.acro_bfrate_rp_super = constrain_float(g.acro_bfrate_rp_super, 0.0f, 0.99f);    
+    g.acro_bfrate_rp_expo = constrain_float(g.acro_bfrate_rp_expo, 0.0f, 1.0f);
+
+
+    //if acro betaflight rate option is enabled, calculate rates using betaflight parameters 
+    if ((g2.acro_options.get() & uint8_t(AcroOptions::BETAFLIGHT_RATES))) {
+        
+        float rp_in;
+
+
+        // roll expo
+        rp_in = float(roll_in)/ROLL_PITCH_YAW_INPUT_MAX;
+        rate_bf_request.x = 200*((rp_in*rp_in*rp_in*rp_in*g.acro_bfrate_rp_expo)+rp_in*(1-g.acro_bfrate_rp_expo))*g.acro_bfrate_rp_rc/(1-(rp_in*g.acro_bfrate_rp_super));
+
+        // pitch expo
+        rp_in = float(pitch_in)/ROLL_PITCH_YAW_INPUT_MAX;
+        rate_bf_request.y = 200*((rp_in*rp_in*rp_in*rp_in*g.acro_bfrate_rp_expo)+rp_in*(1-g.acro_bfrate_rp_expo))*g.acro_bfrate_rp_rc/(1-(rp_in*g.acro_bfrate_rp_super));
+
+        
+    }
+    // Else, calculate roll, pitch rate requests using ACRO_RP_P and ACRP_RP_EXP
+    else if (is_zero(g.acro_rp_expo)) {
         rate_bf_request.x = roll_in * g.acro_rp_p;
         rate_bf_request.y = pitch_in * g.acro_rp_p;
     } else {
