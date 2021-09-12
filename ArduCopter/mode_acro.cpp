@@ -114,7 +114,7 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
     g.acro_rp_expo = constrain_float(g.acro_rp_expo, -0.5f, 1.0f);
 
     // range check BF rates
-    g.acro_bfrate_rp_rc = constrain_float(g.acro_bfrate_rp_rc, 0f, 2.55f);
+    g.acro_bfrate_rp_rc = constrain_float(g.acro_bfrate_rp_rc, 0.0f, 2.55f);
     g.acro_bfrate_rp_super = constrain_float(g.acro_bfrate_rp_super, 0.0f, 0.99f);    
     g.acro_bfrate_rp_expo = constrain_float(g.acro_bfrate_rp_expo, 0.0f, 1.0f);
 
