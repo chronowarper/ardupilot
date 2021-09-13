@@ -128,7 +128,7 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
         //in expo calculation, divide rate by max, apply expo, then 
 
         // roll expo
-        rp_in = float(roll_in)/45.0f;
+        rp_in = float(roll_in)/ROLL_PITCH_YAW_INPUT_MAX;
         
         bf_p = 1.0f/(1.0f-(rp_in*g.altrate_bf_rp_super));
         bf_q = (rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1.0f-g.altrate_bf_rp_expo);
@@ -136,7 +136,7 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
         //rate_bf_request.x = 200*((rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1.0f-g.altrate_bf_rp_expo))*g.altrate_bf_rp_rc/(1.0f-(rp_in*g.altrate_bf_rp_super));
         
         //use pitch axis for debug
-        rate_bf_request.y=bf_q*100.0f;
+        rate_bf_request.y= rp_in;
 
         // pitch expo
         rp_in = float(pitch_in)/45.0f;
