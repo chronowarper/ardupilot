@@ -938,10 +938,8 @@ float Mode::get_pilot_desired_yaw_rate(int16_t stick_angle)
     // calculate yaw rate request
     float yaw_request;
 
-    //if acro betaflight rate option is enabled, calculate rates using betaflight parameters 
-
-    //FIXME - shouldn't use magic # for BF option,
-    if (g.altrate_type==1) {
+   //if alternative rate is set to BETAFLIGHT, calculate rate using betaflight rates 
+    if (g.altrate_type==ALTRATE_TYPE_BETAFLIGHT) {
         
         float y_in,bf_p,bf_q;
         y_in = float(stick_angle)/ROLL_PITCH_YAW_INPUT_MAX;
@@ -952,8 +950,7 @@ float Mode::get_pilot_desired_yaw_rate(int16_t stick_angle)
         //yaw_request = 20000.0f*((y_in*y_in*y_in*y_in*g.altrate_bf_y_expo)+y_in*(1.0f-g.altrate_bf_y_expo))*g.altrate_bf_y_rc/(1.0f-(y_in*g.altrate_bf_y_super));
 
     }
-    //otherwise calculate rates using ACRP_Y_EXP and YAW_P method
-
+    //otherwise calculate rates with default method using  ACRP_Y_EXP and YAW_P 
     else if (is_zero(g2.acro_y_expo)) {
         yaw_request = stick_angle * g.acro_yaw_p;
     } else {

@@ -119,33 +119,27 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
     g.altrate_bf_rp_expo = constrain_float(g.altrate_bf_rp_expo, 0.0f, 1.0f);
 
 
-    //if acro betaflight rate option is enabled, calculate rates using betaflight parameters 
-    if (g.altrate_type==1) {
+    //if alternative rate is set to BETAFLIGHT, calculate rates using betaflight rate 
+    if (g.altrate_type==ALTRATE_TYPE_BETAFLIGHT) {
         
         float rp_in,bf_p,bf_q;
 
-        //is roll/pitch_in is in units of degrees/s  (with nominal range of 0 ~ 45)?
-        //in expo calculation, divide rate by max, apply expo, then 
-
-        // roll expo
-        rp_in = float(roll_in)/ROLL_PITCH_YAW_INPUT_MAX;
+                
+        // roll axis
+        rp_in = float(roll_in)/ROLL_PITCH_YAW_INPUT_MAX;                //calculate input ratio
         
         bf_p = 1.0f/(1.0f-(rp_in*g.altrate_bf_rp_super));
         bf_q = (rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1.0f-g.altrate_bf_rp_expo);
-        rate_bf_request.x = 20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;
-        //rate_bf_request.x = 20000.0f*((rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1.0f-g.altrate_bf_rp_expo))*g.altrate_bf_rp_rc/(1.0f-(rp_in*g.altrate_bf_rp_super));
+        rate_bf_request.x = 20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;      //ardupilot rate is in units of centidegrees
         
-        //use pitch axis for debug
-        //rate_bf_request.y= rp_in;
-        
-        // pitch expo
-        rp_in = float(pitch_in)/ROLL_PITCH_YAW_INPUT_MAX;
+        // pitch axis
+        rp_in = float(pitch_in)/ROLL_PITCH_YAW_INPUT_MAX;               //calculate input ratio
         bf_p = 1.0f/(1.0f-(rp_in*g.altrate_bf_rp_super));
         bf_q = (rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1.0f-g.altrate_bf_rp_expo);
-        rate_bf_request.y = 20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;
+        rate_bf_request.y = 20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;      //ardupilot rate is in units of centidegrees
         
     }
-    // Else, calculate roll, pitch rate requests using ACRO_RP_P and ACRP_RP_EXP
+    // Else, calculate with default rates using ACRO_RP_P and ACRP_RP_EXP
     else if (is_zero(g.acro_rp_expo)) {
         rate_bf_request.x = roll_in * g.acro_rp_p;
         rate_bf_request.y = pitch_in * g.acro_rp_p;
