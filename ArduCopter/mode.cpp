@@ -944,8 +944,8 @@ float Mode::get_pilot_desired_yaw_rate(int16_t stick_angle)
     if (g.altrate_type==1) {
         
         float y_in;
-        y_in = float(stick_angle)/45;
-        yaw_request = 200*((y_in*y_in*y_in*y_in*g.altrate_bf_y_expo)+y_in*(1-g.altrate_bf_y_expo))*g.altrate_bf_y_rc/(1-(y_in*g.altrate_bf_y_super));
+        y_in = float(stick_angle)/ROLL_PITCH_YAW_INPUT_MAX;
+        yaw_request = 20000.0f*((y_in*y_in*y_in*y_in*g.altrate_bf_y_expo)+y_in*(1.0f-g.altrate_bf_y_expo))*g.altrate_bf_y_rc/(1.0f-(y_in*g.altrate_bf_y_super));
 
     }
     //otherwise calculate rates using ACRP_Y_EXP and YAW_P method
