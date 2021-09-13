@@ -943,7 +943,7 @@ float Mode::get_pilot_desired_yaw_rate(int16_t stick_angle)
     //FIXME - shouldn't use magic # for BF option,
     if (g.altrate_type==1) {
         
-        float y_in;
+        float y_in;bf_p;bf_q;
         y_in = float(stick_angle)/ROLL_PITCH_YAW_INPUT_MAX;
 
         bf_p = 1.0f/(1.0f-(y_in*g.altrate_bf_y_super));
