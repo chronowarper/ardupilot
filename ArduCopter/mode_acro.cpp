@@ -122,7 +122,7 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
     //if alternative rate is set to BETAFLIGHT, calculate rates using betaflight rate 
     if (g.altrate_type==ALTRATE_TYPE_BETAFLIGHT) {
         
-        float rp_in,bf_p,bf_q;
+        float rp_in,rp_sign,bf_p,bf_q;
 
                 
         // roll axis
