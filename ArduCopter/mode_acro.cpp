@@ -114,28 +114,34 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
     g.acro_rp_expo = constrain_float(g.acro_rp_expo, -0.5f, 1.0f);
 
     // range check BF rates
-    g.acro_bfrate_rp_rc = constrain_float(g.acro_bfrate_rp_rc, 0.0f, 2.55f);
-    g.acro_bfrate_rp_super = constrain_float(g.acro_bfrate_rp_super, 0.0f, 0.99f);    
-    g.acro_bfrate_rp_expo = constrain_float(g.acro_bfrate_rp_expo, 0.0f, 1.0f);
+    g.altrate_bf_rp_rc = constrain_float(g.altrate_bf_rp_rc, 0.0f, 2.55f);
+    g.altrate_bf_rp_super = constrain_float(g.altrate_bf_rp_super, 0.0f, 0.99f);    
+    g.altrate_bf_rp_expo = constrain_float(g.altrate_bf_rp_expo, 0.0f, 1.0f);
 
 
-    //if acro betaflight rate option is enabled, calculate rates using betaflight parameters 
-    if ((g2.acro_options.get() & uint8_t(AcroOptions::BETAFLIGHT_RATES))) {
+    //if alternative rate is set to BETAFLIGHT, calculate rates using betaflight rate 
+    if (g.altrate_type==ALTRATE_TYPE_BETAFLIGHT) {
         
-        float rp_in;
+        float rp_in,rp_sign,bf_p,bf_q;
 
+                
+        // roll axis
+        rp_in = abs(float(roll_in))/ROLL_PITCH_YAW_INPUT_MAX;   //calculate input ratio. Need to take absolute value as input is signed
+        rp_sign= roll_in/abs(roll_in);                          //get sign for final rate calculation            
 
-        // roll expo
-        rp_in = float(roll_in)/ROLL_PITCH_YAW_INPUT_MAX;
-        rate_bf_request.x = 200*((rp_in*rp_in*rp_in*rp_in*g.acro_bfrate_rp_expo)+rp_in*(1-g.acro_bfrate_rp_expo))*g.acro_bfrate_rp_rc/(1-(rp_in*g.acro_bfrate_rp_super));
-
-        // pitch expo
-        rp_in = float(pitch_in)/ROLL_PITCH_YAW_INPUT_MAX;
-        rate_bf_request.y = 200*((rp_in*rp_in*rp_in*rp_in*g.acro_bfrate_rp_expo)+rp_in*(1-g.acro_bfrate_rp_expo))*g.acro_bfrate_rp_rc/(1-(rp_in*g.acro_bfrate_rp_super));
-
+        bf_p = 1.0f/(1.0f-(rp_in*g.altrate_bf_rp_super));
+        bf_q = (rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1.0f-g.altrate_bf_rp_expo);
+        rate_bf_request.x = rp_sign*20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;      //ardupilot rate is in units of centidegrees
+        
+        // pitch axis
+        rp_in = abs(float(pitch_in))/ROLL_PITCH_YAW_INPUT_MAX;    //calculate input ratio. Need to take absolute value as input is signed
+        rp_sign= pitch_in/abs(pitch_in);                          //get sign for final rate alculation   
+        bf_p = 1.0f/(1.0f-(rp_in*g.altrate_bf_rp_super));
+        bf_q = (rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1.0f-g.altrate_bf_rp_expo);
+        rate_bf_request.y = rp_sign*20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;      //ardupilot rate is in units of centidegrees
         
     }
-    // Else, calculate roll, pitch rate requests using ACRO_RP_P and ACRP_RP_EXP
+    // Else, calculate with default rates using ACRO_RP_P and ACRP_RP_EXP
     else if (is_zero(g.acro_rp_expo)) {
         rate_bf_request.x = roll_in * g.acro_rp_p;
         rate_bf_request.y = pitch_in * g.acro_rp_p;
