@@ -126,17 +126,19 @@ void ModeAcro::get_pilot_desired_angle_rates(int16_t roll_in, int16_t pitch_in, 
 
                 
         // roll axis
-        rp_in = float(roll_in)/ROLL_PITCH_YAW_INPUT_MAX;                //calculate input ratio
-        
+        rp_in = abs(float(roll_in))/ROLL_PITCH_YAW_INPUT_MAX;   //calculate input ratio. Need to take absolute value as input is signed
+        rp_sign= roll_in/abs(roll_in);                          //get sign for final rate calculation            
+
         bf_p = 1.0f/(1.0f-(rp_in*g.altrate_bf_rp_super));
         bf_q = (rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1.0f-g.altrate_bf_rp_expo);
-        rate_bf_request.x = 20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;      //ardupilot rate is in units of centidegrees
+        rate_bf_request.x = rp_sign*20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;      //ardupilot rate is in units of centidegrees
         
         // pitch axis
-        rp_in = float(pitch_in)/ROLL_PITCH_YAW_INPUT_MAX;               //calculate input ratio
+        rp_in = abs(float(pitch_in))/ROLL_PITCH_YAW_INPUT_MAX;    //calculate input ratio. Need to take absolute value as input is signed
+        rp_sign= pitch_in/abs(pitch_in);                          //get sign for final rate alculation   
         bf_p = 1.0f/(1.0f-(rp_in*g.altrate_bf_rp_super));
         bf_q = (rp_in*rp_in*rp_in*rp_in*g.altrate_bf_rp_expo)+rp_in*(1.0f-g.altrate_bf_rp_expo);
-        rate_bf_request.y = 20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;      //ardupilot rate is in units of centidegrees
+        rate_bf_request.y = rp_sign*20000.0f*bf_q*g.altrate_bf_rp_rc*bf_p;      //ardupilot rate is in units of centidegrees
         
     }
     // Else, calculate with default rates using ACRO_RP_P and ACRP_RP_EXP
