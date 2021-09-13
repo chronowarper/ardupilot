@@ -942,7 +942,7 @@ float Mode::get_pilot_desired_yaw_rate(int16_t stick_angle)
     if (g.altrate_type==ALTRATE_TYPE_BETAFLIGHT) {
         
         float y_in,y_sign,bf_p,bf_q;
-        y_in = float(stick_angle)/ROLL_PITCH_YAW_INPUT_MAX;         //calculate input ratio. Need to take absolute value as input is signed.
+        y_in = abs(float(stick_angle))/ROLL_PITCH_YAW_INPUT_MAX;    //calculate input ratio. Need to take absolute value as input is signed.
         y_sign= stick_angle/abs(stick_angle);                       //get sign for final rate alculation   
 
         bf_p = 1.0f/(1.0f-(y_in*g.altrate_bf_y_super));
